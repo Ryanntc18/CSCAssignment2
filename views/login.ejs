@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head.ejs') %>
+<body>
+
+    <% if(isValid == "false"){ %>
+        <script>alert("Login failed, please try again!");</script> 
+     <% } %> 
+ 
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 text-left">
+                <h1>Login page</h1>
+                <%- include('./partials/nav.ejs') %>
+            </div>
+        </div>
+
+        <div class="login-content row">
+            <div class="col-6">
+                <form action="/login" method="POST">
+                    <label for="Username">Username</label>
+                    <input type="text" name="Username" id="Username" required>
+                    <label for="Username">Password</label>
+                    <input type="password" name="Password" id="Password" required>
+                    <button class="btn btn-primary">Submit</button>
+                </form>
+                <p>To login, set Username as admin.</p>
+                <p>The password does not matter</p>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

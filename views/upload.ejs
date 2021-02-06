@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head.ejs') %>
+    <link href="style.css" rel="stylesheet" type="text/css">
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 text-left">
+                <h1>Upload page</h1>
+                <%- include('./partials/nav.ejs') %>
+            </div>
+        </div>
+
+        
+            <div class="card shadow mb-4 col-10 offset-1">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold">Upload image</h6>
+                </div>
+                <div class="card-body">
+                    <% if(message) {
+                        if(message == "File Uploaded Successfully") {%>
+                            <div class="alert alert-success"><%= message %></div>
+                        <% } else { %>
+                            <div class="alert alert-danger"><%= message %></div>
+                    <%}}%>
+                    <form action="/upload" method="post" class="user col-10 offset-1" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <!-- Upload image input-->
+                            <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+                                <input id="upload" type="file" name="image" onchange="readURL(this);" class="form-control border-0">
+                                <label id="upload-label" for="image" class="font-weight-light text-muted"></label>
+                                <div class="input-group-append">
+                                    <label for="upload" class="btn btn-light m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload mr-2 text-muted"></i><small class="text-uppercase font-weight-bold text-muted">Choose file</small></label>
+                                </div>
+                            </div>
+
+                            <!-- Uploaded image area-->
+                            <p class="font-italic text-center">The image selected will be rendered in the space below.</p>
+                            <div class="image-area mt-4"><img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
+                        </div>
+                        <input type="submit" style="width:13rem;margin:auto;" class="btn btn-primary btn-user btn-block"></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="app.js"></script>
+        
+</body>
+</html>

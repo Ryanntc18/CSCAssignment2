@@ -1,6 +1,10 @@
 const express = require('express');
 const morgan = require('morgan');
-const mainRoutes = require('./routes/mainRoutes')
+const multer = require ('multer');
+const AWS = require ('aws-sdk');
+const uuid = require ('uuid').v4;
+const mainRoutes = require('./routes/mainRoutes');
+const { response } = require('express');
 
 const app = express();
 
@@ -15,6 +19,19 @@ app.use(morgan('dev'));
 const PORT = process.env.port || 5000;
 
 app.listen(PORT, ()=> console.log(`Server Started on port ${PORT}`));
+// AWS.config.update({region: 'us-east-1'});
+const s3 = new AWS.S3 ({
+    accessKeyId: '',
+    secretAccessKey: '',
+  });
+
+const storage = multer.memoryStorage ({
+    destination: function (req, file, callback) {
+      callback (null, '');
+    },
+  });
+
+  const upload = multer ({storage}).single ('image');
 
 // To run go to terminal and type in : npm run dev
 app.get('/', (req, res) => {
@@ -51,6 +68,46 @@ app.post('/login', (req, res) => {
 
 app.get('/dashboard-free', (req, res) => {
     res.redirect('./views/dashboard.ejs');
+});
+
+
+
+app.get('/upload', (req, res) =>{
+    var msg = null;
+    if (req.query.msg) msg = req.query.msg;
+    res.render('upload', {
+        title:'Upload Image',
+        message: msg,
+      url: null,
+    });
+});
+
+
+
+app.post ('/upload', upload, (req, res) => {
+    let myFile = req.file.originalname.split ('.');
+    const fileType = myFile[myFile.length - 1];
+    const params = {
+        Bucket: "zwawsbucket",
+        Key: `${uuid()}.${fileType}`,
+        Body: req.file.buffer
+    }
+    s3.upload(params, (error, data) =>{
+        if (error){
+            res.render ('upload.ejs', {
+                title:'Upload Image',
+                message: 'Error in uploading file to S3 Bucket',
+                
+              });
+        } else {
+            res.render ('upload.ejs', {
+                title:'Upload Image',
+                message: 'File Uploaded Successfully',
+                
+              });
+
+    }
+  });
 });
 
 // main routes

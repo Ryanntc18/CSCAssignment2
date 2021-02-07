@@ -9,7 +9,8 @@ app.set('view engine', 'ejs');
 // middleware (for logging)
 app.use(express.static('public/views'));
 app.use(express.urlencoded({extended: true}));
-app.use(morgan('dev'));
+app.use(morgan('method: :method, Basepath: :url, HttpStatus: :status, ResponseLength: :res[content-length], Response Time: - :response-time ms, Date(Time): :date[iso], SourceIp: :remote-addr'));
+
 
 
 const PORT = process.env.port || 5001;

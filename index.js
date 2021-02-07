@@ -129,22 +129,17 @@ var pool  = mysql.createPool({
     password : config.dbpassword,
     database : config.dbname
   });
-  pool.getConnection(function(err, connection) {
-    // connected!
-  });
-
 
   //Execute Query
-
 pool.getConnection(function(err, connection) {
+    if (err) throw err;
   // Use the connection
-  connection.query('SELECT  from  where ', function (error, results, fields) {
+  connection.query('select * from csc2.users where userid = 1', function (error, results, fields) {
     // And done with the connection.
     connection.release();
     // Handle error after the release.
-    if (error) throw error;
-    else console.log(results[0].emp_name);
-    process.exit();
+    console.log(results[0].uname);
+    //process.exit();
   });
 });
 
@@ -173,12 +168,32 @@ app.post('/login', (req, res) => {
     var valid = false;
 
     // check if name is admin
-    if(req.body.Username == "admin"){
-        urlLink = 'pay';
-        valid = true;
-    }
+    
 
-    res.redirect(urlLink+'/?valid=' + valid);
+    pool.getConnection(function(err, connection) {
+        if (err) throw err;
+      // Use the connection
+      connection.query('select * from csc2.users where uname = "'+req.body.Username+'"', function (error, results, fields) {
+        // And done with the connection.
+        connection.release();
+        // Handle error after the release.
+        console.log("USER INPUT "+req.body.Username);
+        console.log("DB VALUE "+results[0].uname);
+
+        var InUname = req.body.Username;
+        var DbUname = results[0].uname;
+        
+        if(results[0].uname == req.body.Username && results[0].pword == req.body.Password){
+            urlLink = 'pay';
+            valid = true;
+        }
+
+        console.log("VALID "+valid);
+
+         res.redirect(urlLink+'/?valid=' + valid);
+        //process.exit();
+      });
+    });
 });
 
 app.get('/dashboard-free', (req, res) => {

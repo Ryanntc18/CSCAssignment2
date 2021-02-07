@@ -1,6 +1,6 @@
 {
-    "dbhost" : "database-1.cfxirqnjifi9.ap-southeast-1.rds.amazonaws.com",
-    "dbname" : "database-1",
+    "dbhost" : "database-2.cfxirqnjifi9.ap-southeast-1.rds.amazonaws.com",
+    "dbname" : "csc2",
     "dbuser" :"admin",
     "dbpassword" :"12345678"
 }

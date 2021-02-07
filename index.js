@@ -162,7 +162,7 @@ pool.getConnection(function(err, connection) {
 
 // To run go to terminal and type in : npm run dev
 app.get('/', (req, res) => {
-    res.render('index', {title:'Home'});
+    res.render('./index', {title:'Home'});
 });
 
 app.get('/dashboard', (req, res) => {

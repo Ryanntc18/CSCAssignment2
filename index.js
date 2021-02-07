@@ -1,41 +1,25 @@
 const express = require('express');
 const morgan = require('morgan');
-const multer = require ('multer');
-const AWS = require ('aws-sdk');
-const uuid = require ('uuid').v4;
-const mainRoutes = require('./routes/mainRoutes');
-const { response } = require('express');
+const mainRoutes = require('./routes/mainRoutes')
 
 const app = express();
 
 app.set('view engine', 'ejs');
 
 // middleware (for logging)
-app.use(express.static('public'));
+app.use(express.static('public/views'));
 app.use(express.urlencoded({extended: true}));
-app.use(morgan('dev'));
+app.use(morgan('method: :method, Basepath: :url, HttpStatus: :status, ResponseLength: :res[content-length], Response Time: - :response-time ms, Date(Time): :date[iso], SourceIp: :remote-addr'));
+
 
 
 const PORT = process.env.port || 5001;
 
 app.listen(PORT, ()=> console.log(`Server Started on port ${PORT}`));
-// AWS.config.update({region: 'us-east-1'});
-//entire part only works if u plug in the access key id and secret access key
-const s3 = new AWS.S3 ({
-    accessKeyId: '',
-    secretAccessKey: '',
-  });
-
-const storage = multer.memoryStorage ({
-    destination: function (req, file, callback) {
-      callback (null, '');
-    },
-  });
-
-  const upload = multer ({storage}).single ('image');
 
 
 //NoSQL GET
+var AWS = require('aws-sdk');
 let awsConfig = {
     "region": "ap-southeast-1",
     "endpoint": "http://dynamodb.ap-southeast-1.amazonaws.com",
@@ -98,19 +82,24 @@ var pool  = mysql.createPool({
     password : config.dbpassword,
     database : config.dbname
   });
+  pool.getConnection(function(err, connection) {
+    // connected!
+  });
+
 
   //Execute Query
-pool.getConnection(function(err, connection) {
-    if (err) throw err;
-  // Use the connection
-  connection.query('select * from csc2.users where userid = 1', function (error, results, fields) {
-    // And done with the connection.
-    connection.release();
-    // Handle error after the release.
-    console.log(results[0].uname);
-    //process.exit();
-  });
-});
+
+// pool.getConnection(function(err, connection) {
+//   // Use the connection
+//   connection.query('SELECT  from  where ', function (error, results, fields) {
+//     // And done with the connection.
+//     connection.release();
+//     // Handle error after the release.
+//     if (error) throw error;
+//     else console.log(results[0].emp_name);
+//     process.exit();
+//   });
+// });
 
 // To run go to terminal and type in : npm run dev
 app.get('/', (req, res) => {
@@ -137,32 +126,12 @@ app.post('/login', (req, res) => {
     var valid = false;
 
     // check if name is admin
-    
+    if(req.body.Username == "admin"){
+        urlLink = 'pay';
+        valid = true;
+    }
 
-    pool.getConnection(function(err, connection) {
-        if (err) throw err;
-      // Use the connection
-      connection.query('select * from csc2.users where uname = "'+req.body.Username+'"', function (error, results, fields) {
-        // And done with the connection.
-        connection.release();
-        // Handle error after the release.
-        console.log("USER INPUT "+req.body.Username);
-        console.log("DB VALUE "+results[0].uname);
-
-        var InUname = req.body.Username;
-        var DbUname = results[0].uname;
-        
-        if(results[0].uname == req.body.Username && results[0].pword == req.body.Password){
-            urlLink = 'pay';
-            valid = true;
-        }
-
-        console.log("VALID "+valid);
-
-         res.redirect(urlLink+'/?valid=' + valid);
-        //process.exit();
-      });
-    });
+    res.redirect(urlLink+'/?valid=' + valid);
 });
 
 app.get('/dashboard-free', (req, res) => {

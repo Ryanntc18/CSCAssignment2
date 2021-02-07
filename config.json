@@ -1,6 +1,6 @@
 {
-    "dbhost" : "your host url",
-    "dbname" : "your DB name",
-    "dbuser" :"username",
-    "dbpassword" :"password"
+    "dbhost" : "database-1.cfxirqnjifi9.ap-southeast-1.rds.amazonaws.com",
+    "dbname" : "database-1",
+    "dbuser" :"admin",
+    "dbpassword" :"12345678"
 }

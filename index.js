@@ -20,10 +20,10 @@ app.listen(PORT, ()=> console.log(`Server Started on port ${PORT}`));
 //NoSQL GET
 var AWS = require('aws-sdk');
 let awsConfig = {
-    "region": "us-east-1",
-    "endpoint": "http://dynamodb.us-east-1.amazonaws.com",
-    "accessKeyId": "",
-    "secretAccessKey": ""
+    "region": "ap-southeast-1",
+    "endpoint": "http://dynamodb.ap-southeast-1.amazonaws.com",
+    "accessKeyId": "AKIARGFD5TU67OJZRNXT",
+    "secretAccessKey": "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"
 };
 AWS.config.update(awsConfig);
 
@@ -31,10 +31,9 @@ let docClient = new AWS.DynamoDB.DocumentClient();
 let fetchOneByKey = function()
 {
     var params = {
-        TableName: "",
+        TableName: "test",
         Key: {
-            "": ""
-
+            "test": "test2"
         }
     };
     docClient.get(params, function (err, data){
@@ -50,24 +49,15 @@ let fetchOneByKey = function()
 fetchOneByKey();
 
 //NoSQL Post
-var AWS = require("aws-sdk");
-let awsConfig = {
-    "region": "us-east-1",
-    "endpoint": "http://dynamodb.us-east-1.amazonaws.com",
-    "accessKeyId": "", 
-    "secretAccessKey": ""
-};
-AWS.config.update(awsConfig);
-
-let docClient = new AWS.DynamoDB.DocumentClient();
-
 let save = function () {
 
     var input = {
-        "": "",
+        "test": "test2",
+        "name": "Ryan",
+        "number": "888"
     };
     var params = {
-        TableName: "",
+        TableName: "test",
         Item:  input
     };
     docClient.put(params, function (err, data) {
@@ -83,104 +73,69 @@ let save = function () {
 save();
 
 //NoSQL Update
-var AWS = require("aws-sdk");
-let awsConfig = {
-    "region": "us-east-1",
-    "endpoint": "http://dynamodb.us-east-1.amazonaws.com",
-    "accessKeyId": "", 
-    "secretAccessKey": ""
-};
-AWS.config.update(awsConfig);
-
-let docClient = new AWS.DynamoDB.DocumentClient();
-
-let modify = function () {
+// let modify = function () {
 
     
-    var params = {
-        TableName: "",
-        Key: { "": "" },
-        UpdateExpression: "set updated_by = :byUser, is_deleted = :boolValue",
-        ExpressionAttributeValues: {
-            ":byUser": "updateUser",
-            ":boolValue": true
-        },
-        ReturnValues: "UPDATED_NEW"
+//     var params = {
+//         TableName: "",
+//         Key: { "": "" },
+//         UpdateExpression: "set updated_by = :byUser, is_deleted = :boolValue",
+//         ExpressionAttributeValues: {
+//             ":byUser": "updateUser",
+//             ":boolValue": true
+//         },
+//         ReturnValues: "UPDATED_NEW"
 
-    };
-    docClient.update(params, function (err, data) {
+//     };
+//     docClient.update(params, function (err, data) {
 
-        if (err) {
-            console.log("users::update::error - " + JSON.stringify(err, null, 2));
-        } else {
-            console.log("users::update::success "+JSON.stringify(data) );
-        }
-    });
-}
+//         if (err) {
+//             console.log("users::update::error - " + JSON.stringify(err, null, 2));
+//         } else {
+//             console.log("users::update::success "+JSON.stringify(data) );
+//         }
+//     });
+// }
 
-modify();
+// modify();
 
 //NoSQL Delete
-var AWS = require("aws-sdk");
-let awsConfig = {
-    "region": "us-east-1",
-    "endpoint": "",
-    "accessKeyId": "", 
-    "secretAccessKey": ""
-};
-AWS.config.update(awsConfig);
+// let remove = function () {
 
-let docClient = new AWS.DynamoDB.DocumentClient();
+//     var params = {
+//         TableName: "users",
+//         Key: {
+//             "": ""
+//         }
+//     };
+//     docClient.delete(params, function (err, data) {
 
-let remove = function () {
+//         if (err) {
+//             console.log("users::delete::error - " + JSON.stringify(err, null, 2));
+//         } else {
+//             console.log("users::delete::success");
+//         }
+//     });
+// }
 
-    var params = {
-        TableName: "users",
-        Key: {
-            "": ""
-        }
-    };
-    docClient.delete(params, function (err, data) {
-
-        if (err) {
-            console.log("users::delete::error - " + JSON.stringify(err, null, 2));
-        } else {
-            console.log("users::delete::success");
-        }
-    });
-}
-
-remove();
+// remove();
 
 //RDS Connection
+var mysql = require('mysql');
+var config = require('./config.json');
 var pool  = mysql.createPool({
-    host     : '',
-    user     : '',
-    password : '',
-    database : ''
+    host     : config.dbhost,
+    user     : config.dbuser,
+    password : config.dbpassword,
+    database : config.dbname
   });
   pool.getConnection(function(err, connection) {
     // connected!
   });
 
-  //Load config
-var config = require('./config.json');
-var pool  = mysql.createPool({
-    host     : config.dbhost,
-    user     : config.dbuser,
-    password : config.dbpassword,
-    database : config.dbname
-  });
 
   //Execute Query
-  var mysql = require('mysql');
-var config = require('./config.json');
-var pool  = mysql.createPool({
-    host     : config.dbhost,
-    user     : config.dbuser,
-    password : config.dbpassword,
-    database : config.dbname
-  });
+
 pool.getConnection(function(err, connection) {
   // Use the connection
   connection.query('SELECT  from  where ', function (error, results, fields) {
@@ -238,4 +193,4 @@ app.use(mainRoutes);
 app.use((req, res) => {
     res.status(404).render('404error', {title:'404 Error'});
 });
-});
+

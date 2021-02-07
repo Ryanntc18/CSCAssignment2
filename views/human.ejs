@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head.ejs') %>
+    <link href="style.css" rel="stylesheet" type="text/css">
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 text-left">
+                <h1>Upload page</h1>
+                <%- include('./partials/nav.ejs') %>
+            </div>
+        </div>
+
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-11">
+                    
+                    <h2>Human Scanner, check if image is a human</h2>
+                    <h3>Input Image link</h3>
+                    <div id="textview">
+                        <!-- <input type="text" name="imglink" id="imglink">
+                        <button class="btn btn-outline-secondary" onclick="checkimg()">submit</button> -->
+                        <div class="input-group mb-3">
+                            <input type="text" name="imglink" id="imglink" class="form-control" placeholder="insert link">
+                            <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="checkimg()">Submit</button>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="app.js"></script>
+        <script>
+        
+            function checkimg(){
+                
+                var imglink = document.getElementById("imglink").value;
+                console.log(validURL(imglink));
+                if(validURL(imglink)){
+                    
+                    var data = {
+                        link:imglink
+                    };
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/checkimg",
+                        // The key needs to match your method's input parameter (case-sensitive).
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function(data){alert(data);},
+                        error: function(errMsg) {
+                            alert(errMsg);
+                            
+                        }
+                    });
+                };
+    
+                if(!validURL(imglink)){
+                    alert("Invalid Url");
+                    
+                }
+                
+            };
+        
+    
+            function validURL (str) {
+                var pattern = new RegExp (
+                '^(https?:\\/\\/)?' + // protocol
+                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+                '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+                '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+                    '(\\#[-a-z\\d_]*)?$',
+                'i'
+                ); // fragment locator
+                return !!pattern.test (str);
+            }
+        </script>
+</body>
+</html>

@@ -5,7 +5,9 @@ const AWS = require ('aws-sdk');
 const uuid = require ('uuid').v4;
 const mainRoutes = require('./routes/mainRoutes');
 const { response } = require('express');
-
+const Clarifai = require('clarifai');
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -22,8 +24,8 @@ app.listen(PORT, ()=> console.log(`Server Started on port ${PORT}`));
 // AWS.config.update({region: 'us-east-1'});
 //entire part only works if u plug in the access key id and secret access key
 const s3 = new AWS.S3 ({
-    accessKeyId: '',
-    secretAccessKey: '',
+    accessKeyId: 'AKIA6JD57VRT3OR35A4R',
+    secretAccessKey: '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',
   });
 
 const storage = multer.memoryStorage ({
@@ -34,6 +36,11 @@ const storage = multer.memoryStorage ({
 
   const upload = multer ({storage}).single ('image');
 
+  const clarifai = new Clarifai.App({
+    apiKey: '1ca463c84fc74b7fbdce2a4cea0d3ff3'
+    });
+
+  
 // To run go to terminal and type in : npm run dev
 app.get('/', (req, res) => {
     res.render('index', {title:'Home'});
@@ -101,6 +108,7 @@ app.post ('/upload', upload, (req, res) => {
                 
               });
         } else {
+            
             res.render ('upload.ejs', {
                 title:'Upload Image',
                 message: 'File Uploaded Successfully',
@@ -111,6 +119,55 @@ app.post ('/upload', upload, (req, res) => {
   });
 });
 
+app.get('/human', (req, res) =>{
+    res.render('human', {
+        title:'human recognition'
+    })
+})
+
+
+
+app.post('/api/checkimg', jsonParser, (req, res) =>{
+  
+    var imagelink = req.body.link;
+    console.log("image link: "+imagelink);
+    var testImg = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHaZ-vu0hAXPpJH6LhJMoq1PFT3PaUiXGI8w&usqp=CAU'
+    var msg = "This image NOT is a human.";
+    clarifai.inputs.search({ input: { url: imagelink } }).then(
+      
+      function (response) {
+       response.hits.forEach(hit => {
+        if(hit.score > 0.8){
+          msg = "This image is a human.";
+          console.log("In 3rd func: "+ msgtext);
+          //console.log(hit.input.data.image);
+          
+          return msg;
+        }
+      });
+      console.log(msg);
+      res.json(msg);
+      },
+      function (err) {
+      console.log(err);
+      }
+      );
+    
+})
+
+
+
+// clarifai.inputs.search({ concept: { name: 'human' } }).then(
+//     function (response) {
+//     response.hits.forEach(hit => {
+//     console.log(hit.score);
+//     console.log(hit.input.data.image);
+//     });
+//     },
+//     function (err) {
+//     console.log(err);
+//     }
+//     );
 // main routes
 app.use(mainRoutes);
 

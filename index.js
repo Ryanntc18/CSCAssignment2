@@ -24,8 +24,8 @@ app.listen(PORT, ()=> console.log(`Server Started on port ${PORT}`));
 // AWS.config.update({region: 'us-east-1'});
 //entire part only works if u plug in the access key id and secret access key
 const s3 = new AWS.S3 ({
-    accessKeyId: 'AKIA6JD57VRT3OR35A4R',
-    secretAccessKey: '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',
+    accessKeyId: '',
+    secretAccessKey: '',
   });
 
 const storage = multer.memoryStorage ({

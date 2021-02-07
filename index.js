@@ -136,17 +136,17 @@ var pool  = mysql.createPool({
 
   //Execute Query
 
-pool.getConnection(function(err, connection) {
-  // Use the connection
-  connection.query('SELECT  from  where ', function (error, results, fields) {
-    // And done with the connection.
-    connection.release();
-    // Handle error after the release.
-    if (error) throw error;
-    else console.log(results[0].emp_name);
-    process.exit();
-  });
-});
+// pool.getConnection(function(err, connection) {
+//   // Use the connection
+//   connection.query('SELECT  from  where ', function (error, results, fields) {
+//     // And done with the connection.
+//     connection.release();
+//     // Handle error after the release.
+//     if (error) throw error;
+//     else console.log(results[0].emp_name);
+//     process.exit();
+//   });
+// });
 
 // To run go to terminal and type in : npm run dev
 app.get('/', (req, res) => {

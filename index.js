@@ -12,7 +12,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(morgan('dev'));
 
 
-const PORT = process.env.port || 5000;
+const PORT = process.env.port || 5001;
 
 app.listen(PORT, ()=> console.log(`Server Started on port ${PORT}`));
 

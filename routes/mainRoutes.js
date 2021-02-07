@@ -66,6 +66,18 @@ router.post('/create-subscription', jsonParser,  async (req, res) => {
   
     res.send({ subscription });
   });
+
+router.post('/create-customer', async (req, res) => {
+    // Create a new customer object
+    const customer = await stripe.customers.create({
+      email: req.body.email,
+    });
   
+    // Save the customer.id in your database alongside your user.
+    // We're simulating authentication with a cookie.
+    res.cookie('customer', customer.id, { maxAge: 900000, httpOnly: true });
+  
+    res.send({ customer });
+});
 
 module.exports = router;

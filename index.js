@@ -89,54 +89,6 @@ let save = function () {
 
 save();
 
-//NoSQL Update
-// let modify = function () {
-
-    
-//     var params = {
-//         TableName: "",
-//         Key: { "": "" },
-//         UpdateExpression: "set updated_by = :byUser, is_deleted = :boolValue",
-//         ExpressionAttributeValues: {
-//             ":byUser": "updateUser",
-//             ":boolValue": true
-//         },
-//         ReturnValues: "UPDATED_NEW"
-
-//     };
-//     docClient.update(params, function (err, data) {
-
-//         if (err) {
-//             console.log("users::update::error - " + JSON.stringify(err, null, 2));
-//         } else {
-//             console.log("users::update::success "+JSON.stringify(data) );
-//         }
-//     });
-// }
-
-// modify();
-
-//NoSQL Delete
-// let remove = function () {
-
-//     var params = {
-//         TableName: "users",
-//         Key: {
-//             "": ""
-//         }
-//     };
-//     docClient.delete(params, function (err, data) {
-
-//         if (err) {
-//             console.log("users::delete::error - " + JSON.stringify(err, null, 2));
-//         } else {
-//             console.log("users::delete::success");
-//         }
-//     });
-// }
-
-// remove();
-
 //RDS Connection
 var mysql = require('mysql');
 var config = require('./config.json');
@@ -167,7 +119,7 @@ app.get('/', (req, res) => {
 
 app.get('/dashboard', (req, res) => {
     // loginStatus must be used here as there will be an error on the html if it does not exist
-    res.render('dashboard', {title:'Dashboard', loginStatus: false});
+    res.render('dashboard', {title:'Dashboard', loginStatus: true});
 });
 
 app.get('/login', (req, res) => {
@@ -255,6 +207,32 @@ app.post ('/upload', upload, (req, res) => {
 
     }
   });
+});
+
+// Post method to get login infomation
+app.post('/talent', (req, res) => {
+    console.log(req.body.Talentage);
+    console.log(req.body.Talentname);
+    console.log(req.body.Talentpic);
+
+    // check if name is admin
+    
+
+    pool.getConnection(function(err, connection) {
+        if (err) throw err;
+      // Use the connection
+      connection.query('insert into talents(talentname, talentage, talentpic) Values("'+req.body.Talentname+'", '+req.body.Talentage+', "'+req.body.Talentpic+'")', function (error, results, fields) {
+        // And done with the connection.
+        connection.release();
+        // Handle error after the release.
+        //process.exit();
+        res.render ('talentsuccess.ejs', {
+            title:'Talent Application',
+            message: 'Talent Applied succesfully',
+            
+          });
+      });
+    });
 });
 
 // main routes

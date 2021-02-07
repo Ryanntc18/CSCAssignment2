@@ -2,7 +2,6 @@
 <html lang="en">
     <%- include('./partials/head.ejs') %>
 <body>
-
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 text-left">
@@ -11,6 +10,27 @@
             </div>
         </div>
     </div>
+    <div class="talent-content row">
+        <div class="col-6">
+            <form action="/talent" method="POST">
+                <div class="">
+                    <label for="Talentname">Talent Name:</label>
+                    <input type="text" name="Talentname" id="Talentname" required>
+                </div>
+                <div class="">
+                    <label for="Talentage">Talent Age: </label>
+                    <input type="password" name="Talentage" id="Talentage" required>
+                </div>
+                <div class="">
+                    <label for="Talentpic">Talent Image: </label>
+                    <input type="password" name="Talentpic" id="Talentpic" required>
+                </div>
+                <button class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    
     
     
 </body>

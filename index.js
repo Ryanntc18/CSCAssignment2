@@ -36,7 +36,6 @@ const storage = multer.memoryStorage ({
 
 
 //NoSQL GET
-var AWS = require('aws-sdk');
 let awsConfig = {
     "region": "ap-southeast-1",
     "endpoint": "http://dynamodb.ap-southeast-1.amazonaws.com",

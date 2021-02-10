@@ -33,10 +33,10 @@ const storage = multer.memoryStorage ({
     destination: function (req, file, callback) {
       callback (null, '');
     },
+});
 
 
 //NoSQL GET
-var AWS = require('aws-sdk');
 let awsConfig = {
     "region": "ap-southeast-1",
     "endpoint": "http://dynamodb.ap-southeast-1.amazonaws.com",
@@ -99,24 +99,22 @@ var pool  = mysql.createPool({
     password : config.dbpassword,
     database : config.dbname
   });
-  pool.getConnection(function(err, connection) {
-    // connected!
-  });
 
+//Inserting new talent RDS
+app.post('/talent', (req, res) => {
 
-  //Execute Query
+        pool.getConnection(function(err, connection) {
+        // Use the connection
+        connection.query('insert into talents(talentname, talentage, talentpic) Values("'+req.body.Talentname+'", '+req.body.Talentage+', "'+req.body.Talentpic+'")', function (error, results, fields) {
+        // And done with the connection.
+        connection.release();
+        // Handle error after the release.
+        if (error) throw error;
+        res.redirect('dashboard');
+    });
+    });
+});
 
-// pool.getConnection(function(err, connection) {
-//   // Use the connection
-//   connection.query('SELECT  from  where ', function (error, results, fields) {
-//     // And done with the connection.
-//     connection.release();
-//     // Handle error after the release.
-//     if (error) throw error;
-//     else console.log(results[0].emp_name);
-//     process.exit();
-//   });
-// });
 
   const clarifai = new Clarifai.App({
     apiKey: '1ca463c84fc74b7fbdce2a4cea0d3ff3'
@@ -174,32 +172,32 @@ app.get('/upload', (req, res) =>{
 
 
 
-app.post ('/upload', upload, (req, res) => {
-    let myFile = req.file.originalname.split ('.');
-    const fileType = myFile[myFile.length - 1];
-    const params = {
-        Bucket: "zwawsbucket",
-        Key: `${uuid()}.${fileType}`,
-        Body: req.file.buffer
-    }
-    s3.upload(params, (error, data) =>{
-        if (error){
-            res.render ('upload.ejs', {
-                title:'Upload Image',
-                message: 'Error in uploading file to S3 Bucket',
+// app.post ('/upload', upload, (req, res) => {
+//     let myFile = req.file.originalname.split ('.');
+//     const fileType = myFile[myFile.length - 1];
+//     const params = {
+//         Bucket: "zwawsbucket",
+//         Key: `${uuid()}.${fileType}`,
+//         Body: req.file.buffer
+//     }
+//     s3.upload(params, (error, data) =>{
+//         if (error){
+//             res.render ('upload.ejs', {
+//                 title:'Upload Image',
+//                 message: 'Error in uploading file to S3 Bucket',
                 
-              });
-        } else {
+//               });
+//         } else {
             
-            res.render ('upload.ejs', {
-                title:'Upload Image',
-                message: 'File Uploaded Successfully',
+//             res.render ('upload.ejs', {
+//                 title:'Upload Image',
+//                 message: 'File Uploaded Successfully',
                 
-              });
+//               });
 
-    }
-  });
-});
+//     }
+//   });
+// });
 
 app.get('/human', (req, res) =>{
     res.render('human', {

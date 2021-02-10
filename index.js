@@ -32,6 +32,7 @@ const s3 = new AWS.S3 ({
 const storage = multer.memoryStorage ({
     destination: function (req, file, callback) {
       callback (null, '');
+    },
 });
 
 

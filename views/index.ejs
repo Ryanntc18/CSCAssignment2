@@ -1,38 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-    <%- include('./partials/head.ejs') %>
-<body>
-    
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 text-left">
-                <h1>Welcome to talents</h1>
-                <%- include('./partials/nav.ejs') %>
+<%- include('./partials/head.ejs') %>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+        integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+    <body>
+
+        <div class="container-fluid p-2">
+            <div class="row">
+                <div class="col-12 text-left">
+                    <h1 class="text-secondary">Welcome to talents</h1>
+                    <%- include('./partials/nav.ejs') %>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="talent-content row">
-        <div class="col-6">
-            <form action="/talent" method="POST">
-                <div class="">
-                    <label for="Talentname">Talent Name:</label>
-                    <input type="text" name="Talentname" id="Talentname" required>
-                </div>
-                <div class="">
-                    <label for="Talentage">Talent Age: </label>
-                    <input type="password" name="Talentage" id="Talentage" required>
-                </div>
-                <div class="">
-                    <label for="Talentpic">Talent Image: </label>
-                    <input type="password" name="Talentpic" id="Talentpic" required>
-                </div>
-                <button class="btn btn-primary">Submit</button>
-            </form>
+        <div class="talent-content row form-group card d-flex p-2 mt-4 mx-auto rounded" style="width: 80%;">
+            <div class="card-body p-2 w-100 rounded">
+                <ul class="list-group list-group-flush rounded">
+                    <li class="list-group-item bg-dark rounded">
+                        <h5 class="card-title text-white">Talent application</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Kindly provide your information</h6>
+                    </li>
+                    <li class="list-group-item bg-secondary rounded">
+                        <form action="/talent" method="POST">
+                            <div class="p-2 row">
+                                <label for="Talentname" class="col-2 text-white">Talent Name:</label>
+                                <input type="text" name="Talentname" id="Talentname" class="col-10 text-white rounded border-secondary" required>
+                            </div>
+                            <div class="p-2 row">
+                                <label for="Talentage" class="col-2 text-white">Talent Age: </label>
+                                <input type="password" name="Talentage" id="Talentage" class="col-10 text-white rounded border-secondary" required>
+                            </div>
+                            <div class="p-2 row">
+                                <label for="Talentpic" class="col-2 text-white">Talent Image: </label>
+                                <input type="password" name="Talentpic" id="Talentpic" class="col-10 text-white rounded border-secondary" required>
+                            </div>
+                            <button class="btn btn-primary mt-4 w-100 rounded">Submit</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
 
-    
-    
-    
-</body>
+
+
+
+    </body>
+
 </html>

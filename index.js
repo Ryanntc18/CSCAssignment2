@@ -35,6 +35,7 @@ const storage = multer.memoryStorage ({
     },
 });
 
+const upload = multer ({storage}).single ('image');
 
 //NoSQL GET
 let awsConfig = {
@@ -89,6 +90,62 @@ let save = function () {
 }
 
 save();
+
+//NoSQL Update
+// AWS.config.update(awsConfig);
+
+// let docClient = new AWS.DynamoDB.DocumentClient();
+
+// let modify = function () {
+
+    
+//     var params = {
+//         TableName: "",
+//         Key: { "": "" },
+//         UpdateExpression: "set updated_by = :byUser, is_deleted = :boolValue",
+//         ExpressionAttributeValues: {
+//             ":byUser": "updateUser",
+//             ":boolValue": true
+//         },
+//         ReturnValues: "UPDATED_NEW"
+
+//     };
+//     docClient.update(params, function (err, data) {
+
+//         if (err) {
+//             console.log("users::update::error - " + JSON.stringify(err, null, 2));
+//         } else {
+//             console.log("users::update::success "+JSON.stringify(data) );
+//         }
+//     });
+// }
+
+// modify();
+
+//NoSQL Delete
+// AWS.config.update(awsConfig);
+
+// let docClient = new AWS.DynamoDB.DocumentClient();
+
+// let remove = function () {
+
+//     var params = {
+//         TableName: "users",
+//         Key: {
+//             "email_id": "example@gmail.com"
+//         }
+//     };
+//     docClient.delete(params, function (err, data) {
+
+//         if (err) {
+//             console.log("users::delete::error - " + JSON.stringify(err, null, 2));
+//         } else {
+//             console.log("users::delete::success");
+//         }
+//     });
+// }
+
+// remove();
 
 //RDS Connection
 var mysql = require('mysql');
@@ -172,32 +229,32 @@ app.get('/upload', (req, res) =>{
 
 
 
-// app.post ('/upload', upload, (req, res) => {
-//     let myFile = req.file.originalname.split ('.');
-//     const fileType = myFile[myFile.length - 1];
-//     const params = {
-//         Bucket: "zwawsbucket",
-//         Key: `${uuid()}.${fileType}`,
-//         Body: req.file.buffer
-//     }
-//     s3.upload(params, (error, data) =>{
-//         if (error){
-//             res.render ('upload.ejs', {
-//                 title:'Upload Image',
-//                 message: 'Error in uploading file to S3 Bucket',
+app.post ('/upload', upload, (req, res) => {
+    let myFile = req.file.originalname.split ('.');
+    const fileType = myFile[myFile.length - 1];
+    const params = {
+        Bucket: "zwawsbucket",
+        Key: `${uuid()}.${fileType}`,
+        Body: req.file.buffer
+    }
+    s3.upload(params, (error, data) =>{
+        if (error){
+            res.render ('upload.ejs', {
+                title:'Upload Image',
+                message: 'Error in uploading file to S3 Bucket',
                 
-//               });
-//         } else {
+              });
+        } else {
             
-//             res.render ('upload.ejs', {
-//                 title:'Upload Image',
-//                 message: 'File Uploaded Successfully',
+            res.render ('upload.ejs', {
+                title:'Upload Image',
+                message: 'File Uploaded Successfully',
                 
-//               });
+              });
 
-//     }
-//   });
-// });
+    }
+  });
+});
 
 app.get('/human', (req, res) =>{
     res.render('human', {
@@ -207,7 +264,7 @@ app.get('/human', (req, res) =>{
 
 
 
-app.post('/api/checkimg', jsonParser, (req, res) =>{
+app.post('/checkimg', jsonParser, (req, res) =>{
   
     var imagelink = req.body.link;
     console.log("image link: "+imagelink);

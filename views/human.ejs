@@ -2,7 +2,7 @@
 <html lang="en">
     <%- include('./partials/head.ejs') %>
     <link href="style.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    
 
 <body>
     <div class="container-fluid">
@@ -47,16 +47,20 @@
                     var data = {
                         link:imglink
                     };
-                    
+                    console.log("ONE");
                     $.ajax({
                         type: "POST",
-                        url: "/api/checkimg",
+                        url: "/checkimg",
                         // The key needs to match your method's input parameter (case-sensitive).
                         data: JSON.stringify(data),
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
-                        success: function(data){alert(data);},
+                        success: function(data){
+                            console.log("TWO");
+                            alert(data);
+                        },
                         error: function(errMsg) {
+                            console.log("THREE");
                             alert(errMsg);
                             
                         }

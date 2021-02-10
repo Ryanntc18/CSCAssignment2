@@ -17,7 +17,7 @@ app.use(express.static('public/views'));
 app.use(express.urlencoded({extended: true}));
 app.use(morgan('method: :method, Basepath: :url, HttpStatus: :status, ResponseLength: :res[content-length], Response Time: - :response-time ms, Date(Time): :date[iso], SourceIp: :remote-addr'));
 
-
+const upload = multer ({storage}).single ('image');
 
 const PORT = process.env.port || 5001;
 
